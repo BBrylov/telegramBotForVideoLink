@@ -1,4 +1,5 @@
 import logging
+import sys
 import os
 import re
 from datetime import datetime
@@ -13,11 +14,11 @@ from pytubefix.exceptions import (
     RecordingUnavailable
 )
 
-# Настройка логирования
+# Настройка логгера в stdout для systemd journal
 logging.basicConfig(
-    filename='logs/bot.log',
     level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s'
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    stream=sys.stdout
 )
 logger = logging.getLogger(__name__)
 
@@ -75,8 +76,8 @@ def download_video(url: str, download_path: str) -> str:
         VideoPrivate,
         RecordingUnavailable
     ) as e:
-        logger.error(f"Pytube error: {type(e).__name__} - {str(e)}")
+        logger.exception(f"Pytube error: {type(e).__name__} - {str(e)}")
         raise
     except Exception as e:
-        logger.error(f"Unexpected error: {str(e)}")
+        logger.exception(f"Unexpected error: {str(e)}")
         raise IOError(f"Download failed: {str(e)}") from e

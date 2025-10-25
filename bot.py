@@ -1,15 +1,16 @@
 import logging
+import sys
 import re
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters
 from config import load_config
 from downloader import download_video
 import auth
 
-# Настройка логгера
+# Настройка логгера в stdout для systemd journal
 logging.basicConfig(
-    filename='logs/bot.log',
     level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s'
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    stream=sys.stdout
 )
 logger = logging.getLogger(__name__)
 
@@ -81,8 +82,12 @@ def main():
         logger.info("Bot started successfully")
 
     except Exception as e:
-        logger.critical(f"Failed to start bot: {str(e)}", exc_info=True)
+        logger.exception("Failed to start bot")
         raise
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except Exception as e:
+        logger.exception("Unhandled exception in main")
+        raise

@@ -1,12 +1,13 @@
 import json
+import sys
 import logging
 import os
 
-# Настройка логгера
+# Настройка логгера в stdout для systemd journal
 logging.basicConfig(
-    filename='logs/bot.log',
     level=logging.INFO,
-    format='%(asctime)s - %(levelname)s - %(message)s'
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    stream=sys.stdout
 )
 
 def load_config():
