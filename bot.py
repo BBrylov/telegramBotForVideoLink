@@ -3,6 +3,7 @@ import re
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters
 from config import load_config
 from downloader import download_video
+import auth
 
 # Настройка логгера
 logging.basicConfig(
@@ -27,6 +28,14 @@ async def start(update, context):
 async def handle_message(update, context):
     """Обработчик текстовых сообщений"""
     user_id = update.effective_user.id
+
+    # Проверка авторизации пользователя
+    if not auth.is_user_allowed(user_id):
+        error_msg = f"⛔ Доступ запрещён. Ваш ID: {user_id}. Обратитесь к администратору."
+        await update.message.reply_text(error_msg)
+        logger.warning(f"Unauthorized access attempt: {user_id}")
+        return
+
     text = update.message.text
     logger.info(f"Received message from {user_id}: {text}")
 
