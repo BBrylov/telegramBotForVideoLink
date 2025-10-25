@@ -1,0 +1,17 @@
+[Unit]
+Description=Telegram VideoLinks Bot
+After=network.target
+
+[Service]
+User=bbrylov
+WorkingDirectory=/path_to_telegram_yt_bot
+ExecStart=/path_to_telegram_yt_bot/venv/bin/python -u bot.py
+Restart=always
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+Environment="PYTHONUNBUFFERED=1"
+# Логи доступны через: journalctl -u telegram_yt_bot.service
+
+[Install]
+WantedBy=multi-user.target
