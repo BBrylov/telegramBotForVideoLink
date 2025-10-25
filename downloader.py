@@ -3,7 +3,15 @@ import os
 import re
 from datetime import datetime
 from pytubefix import YouTube
-from pytubefix.exceptions import PytubeError
+from pytubefix.exceptions import (
+    VideoUnavailable,
+    RegexMatchError,
+    ExtractError,
+    LiveStreamError,
+    MembersOnly,
+    VideoPrivate,
+    RecordingUnavailable
+)
 
 # Настройка логирования
 logging.basicConfig(
@@ -58,8 +66,16 @@ def download_video(url: str, download_path: str) -> str:
         logger.info(f"Video successfully saved to: {filepath}")
         return filepath
 
-    except PytubeError as e:
-        logger.error(f"Pytube error: {str(e)}")
+    except (
+        VideoUnavailable,
+        RegexMatchError,
+        ExtractError,
+        LiveStreamError,
+        MembersOnly,
+        VideoPrivate,
+        RecordingUnavailable
+    ) as e:
+        logger.error(f"Pytube error: {type(e).__name__} - {str(e)}")
         raise
     except Exception as e:
         logger.error(f"Unexpected error: {str(e)}")
