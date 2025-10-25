@@ -1,0 +1,29 @@
+{
+  "version": "1.0",
+  "ruleFiles": [
+    "AI_RULES.md"
+  ],
+  "autoApplyRules": true,
+  "validationRules": {
+    "filePatterns": {
+      "include": ["*.py", "*.md", "*.json"],
+      "exclude": ["settings.json", "logs/*", "downloads/*"]
+    },
+    "checks": [
+      {
+        "name": "filename-format",
+        "pattern": "<channel>_YYYY-MM-DD_<title>.mp4",
+        "files": ["downloader.py"]
+      },
+      {
+        "name": "no-direct-settings-edit",
+        "pattern": "settings.json",
+        "action": "block"
+      }
+    ]
+  },
+  "logging": {
+    "level": "info",
+    "file": "logs/roo-code.log"
+  }
+}
